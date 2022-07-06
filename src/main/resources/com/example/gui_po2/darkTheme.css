@@ -1,0 +1,110 @@
+.label, .button, .table-row-cell, .list-cell, .table-header {
+    -fx-font-family: "Arial";
+}
+
+.root {
+    -fx-background-color: #2a2a2a;
+}
+
+.table-view{
+    -fx-background-color: transparent;
+}
+
+.table-view:focused{
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header-background{
+    -fx-background-color: #3d3d3d;
+}
+
+.table-view .column-header-background .label{
+    -fx-background-color: transparent;
+    -fx-text-fill: #d3d3d3;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+}
+
+.table-view .table-cell{
+    -fx-text-fill: white;
+}
+
+.table-row-cell{
+    -fx-background-color: -fx-table-cell-border-color, #2a2a2a;
+    -fx-border-color: transparent;
+}
+
+.table-row-cell:odd{
+    -fx-background-color: -fx-table-cell-border-color, #3d3d3d;
+}
+
+.list-view{
+    -fx-background-color: transparent;
+}
+
+.list-view:focused{
+    -fx-background-color: transparent;
+}
+
+
+.list-cell {
+    -fx-background-color: #2a2a2a;
+    -fx-text-fill: white;
+    -fx-border-color: #c4c2c2;
+}
+
+.list-cell:selected {
+    -fx-background-color: #bebebe;
+}
+
+.list-cell:odd:selected {
+    -fx-background-color: #bebebe;
+}
+
+.list-cell:odd {
+    -fx-background-color: #3d3d3d;
+}
+
+.button {
+    -fx-background-color: #3d3d3d;
+    -fx-border-color: #c4c2c2;
+    -fx-text-fill: white;
+}
+
+.button:hover {
+    -fx-background-color: #2a2a2a;
+}
+
+.menu-bar {
+    -fx-background-color: #3d3d3d;
+    -fx-text-fill: white;
+}
+
+.menu {
+    -fx-background-color: #3d3d3d;
+    -fx-border-color: #3d3d3d;
+    -fx-text-fill: white;
+}
+
+.menu:hover {
+    -fx-background-color: #2a2a2a;
+}
+
+.menu-item {
+    -fx-background-color: #3d3d3d;
+    -fx-text-fill: white;
+}
+
+.menu-item:hover {
+    -fx-background-color: #2a2a2a;
+}
+
+.label {
+    -fx-text-fill: white;
+}
+
+#ifBadLogin {
+    -fx-text-fill: red;
+}

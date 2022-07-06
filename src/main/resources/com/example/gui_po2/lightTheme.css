@@ -1,0 +1,8 @@
+.label, .button, .table-row-cell, .list-cell, .table-header {
+    -fx-font-family: "Arial";
+    -fx-font-size: 12px;
+}
+
+#ifBadLogin {
+    -fx-text-fill: red;
+}
