@@ -1,8 +1,8 @@
-module com.example.gui_po2 {
+module com.example.manager {
     requires javafx.controls;
     requires javafx.fxml;
 
 
-    opens com.example.gui_po2 to javafx.fxml;
-    exports com.example.gui_po2 ;
+    opens com.example.manager to javafx.fxml;
+    exports com.example.manager;
 }

@@ -2,16 +2,8 @@
     -fx-font-family: "Arial";
 }
 
-.root {
+.root, .table-view, .table-view:focused, .column-header, .list-view, .list-view:focused {
     -fx-background-color: #2a2a2a;
-}
-
-.table-view{
-    -fx-background-color: transparent;
-}
-
-.table-view:focused{
-    -fx-background-color: transparent;
 }
 
 .table-view .column-header-background{
@@ -21,10 +13,6 @@
 .table-view .column-header-background .label{
     -fx-background-color: transparent;
     -fx-text-fill: #d3d3d3;
-}
-
-.table-view .column-header {
-    -fx-background-color: transparent;
 }
 
 .table-view .table-cell{
@@ -40,26 +28,13 @@
     -fx-background-color: -fx-table-cell-border-color, #3d3d3d;
 }
 
-.list-view{
-    -fx-background-color: transparent;
-}
-
-.list-view:focused{
-    -fx-background-color: transparent;
-}
-
-
 .list-cell {
     -fx-background-color: #2a2a2a;
     -fx-text-fill: white;
     -fx-border-color: #c4c2c2;
 }
 
-.list-cell:selected {
-    -fx-background-color: #bebebe;
-}
-
-.list-cell:odd:selected {
+.list-cell:selected, .list-cell:odd:selected {
     -fx-background-color: #bebebe;
 }
 
@@ -88,17 +63,13 @@
     -fx-text-fill: white;
 }
 
-.menu:hover {
+.menu:hover, .menu-item:hover {
     -fx-background-color: #2a2a2a;
 }
 
 .menu-item {
     -fx-background-color: #3d3d3d;
     -fx-text-fill: white;
-}
-
-.menu-item:hover {
-    -fx-background-color: #2a2a2a;
 }
 
 .label {

@@ -1,4 +1,4 @@
-package com.example.gui_po2;
+package com.example.manager;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -16,15 +16,16 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
+        stg = stage;
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("login-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stg=stage;
+
         scene.getStylesheets().add(getClass().getResource("darkTheme.css").toExternalForm());
         stage.setTitle("Password Manager");
         stage.setMinWidth(638);
         stage.setMinHeight(600);
         stage.setScene(scene);
-        stage.getIcons().add(new Image("lock2.png"));
+        stage.getIcons().add(new Image("lock.png"));
 
         stage.show();
 
@@ -33,6 +34,7 @@ public class App extends Application {
     public static String dateSave(){
         SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
         Date date = new Date(System.currentTimeMillis());
+
         return "Last logged in: " + formatter.format(date);
     }
     public  void changeStage() throws IOException {

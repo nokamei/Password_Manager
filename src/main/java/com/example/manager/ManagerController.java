@@ -1,4 +1,4 @@
-package com.example.gui_po2;
+package com.example.manager;
 
 import data.Cipher;
 import data.Entry;
@@ -21,14 +21,16 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 
-import static com.example.gui_po2.App.stg;
+import static com.example.manager.App.stg;
 
-public class ManagerController implements Initializable  {
+public class ManagerController
+        implements Initializable  {
 
     FileChooser fileChooser = new FileChooser();
     BufferedWriter writer;
     BufferedReader reader;
     String source;
+    static final int STEP = 1;
 
 
     @FXML
@@ -57,38 +59,41 @@ public class ManagerController implements Initializable  {
     TextField newPassword;
 
 
-    public File chooseFile(){
-        File file;
-        file = fileChooser.showOpenDialog(new Stage());
-        if(file == null){
-            file = new File("src/main/java/data/ciphered.txt");
-        }
+    public File chooseFile() {
+        File file = fileChooser.showOpenDialog(new Stage());
+        if (file == null)
+            file = new File("src/main/java/data/ciphered.txt"); //domyślne zachowanie w razie braku inputu
+
         return file;
     }
 
     @FXML
     public void readFromFile() throws IOException {
+    // po odszyfrowaniu zapisu z pliku tekstowego dane są dodawane do struktur danych
         File file = chooseFile();
         source = file.getAbsolutePath();
-        if(file.getName().contains(".txt")){
+
+        if(file.getName().contains(".txt")) {
+
             reader = new BufferedReader(new FileReader(source));
             data.Group currentGroup = null;
             boolean groupNotNull = false;
 
             for (String line = reader.readLine(); line != null; line = reader.readLine()) {
+
                 String[] elements = line.split(" ");
-                if(elements.length == 1){
-                    if(groupNotNull) {
+
+                if (elements.length == 1) {
+                    if(groupNotNull)
                         groups.getItems().add(currentGroup);
-                    }
-                    currentGroup = new data.Group(Cipher.decipher(elements[0]));
+                    currentGroup = new data.Group(Cipher.cipher(elements[0], -STEP));
                     groupNotNull = true;
                 }
                 else {
                      Entry entryTemp = new Entry(
-                             Cipher.decipher(elements[0]),
-                             Cipher.decipher(elements[1]),
-                             Cipher.decipher(elements[2]));
+                             Cipher.cipher(elements[0], -STEP),
+                             Cipher.cipher(elements[1], -STEP),
+                             Cipher.cipher(elements[2], -STEP));
                      currentGroup.addEntry(entryTemp);
                 }
             }
@@ -99,31 +104,32 @@ public class ManagerController implements Initializable  {
 
         }
     }
+
     @FXML
-    public void changeMode(){
+    public void changeMode() {
         ObservableList<String> sheets = stg.getScene().getStylesheets();
         String current = sheets.get(0);
         String opposite = current.contains("lightTheme") ? "darkTheme" : "lightTheme";
         sheets.clear();
         sheets.add(getClass().getResource(opposite + ".css").toExternalForm());
     }
+
     @FXML
     public void saveAll() throws IOException {
+
         File file = new File(source);
         writer = new BufferedWriter(new FileWriter(file));
         Group[] saveGroups = groups.getItems().toArray(new Group[20]);
 
-        for(Group a : saveGroups){
-            if(a == null){
-                break;
-            }
-            writer.write(Cipher.cipher(a.getName()) + '\n');
+        for (Group a : saveGroups) {
+            if(a == null) break;
+            writer.write(Cipher.cipher(a.getName(), STEP) + '\n');
 
             for(Entry b : a.getEntries() ){
                 StringBuilder tempSave = new StringBuilder();
-                tempSave.append(Cipher.cipher(b.getTitle())).append(" ");
-                tempSave.append(Cipher.cipher(b.getUsername())).append(" ");
-                tempSave.append(Cipher.cipher(b.getPassword()));
+                tempSave.append(Cipher.cipher(b.getTitle(), STEP)).append(" ");
+                tempSave.append(Cipher.cipher(b.getUsername(), STEP)).append(" ");
+                tempSave.append(Cipher.cipher(b.getPassword(), STEP));
                 writer.write(tempSave.toString() + '\n');
             }
 
@@ -132,30 +138,36 @@ public class ManagerController implements Initializable  {
 
     }
     @FXML
-    public void titleEdit(TableColumn.CellEditEvent<Entry,String> event){
+    public void titleEdit(TableColumn.CellEditEvent<Entry,String> event) {
         Entry entry = tableView.getSelectionModel().getSelectedItem();
-        if(event.getNewValue().matches(("\\S+"))){
+        if (event.getNewValue().matches(("\\S+")))
             entry.setTitle(event.getNewValue());
-        }
     }
     @FXML
-    public void usernameEdit(TableColumn.CellEditEvent<Entry,String> event){
+    public void usernameEdit(TableColumn.CellEditEvent<Entry,String> event) {
         Entry entry = tableView.getSelectionModel().getSelectedItem();
-        if(event.getNewValue().matches(("\\S+"))) {
+        if (event.getNewValue().matches(("\\S+")))
             entry.setUsername(event.getNewValue());
-        }
-
     }
     @FXML
-    public void addNewEntry(){
-        if(newTitle.getText().matches(("\\S+")) && newUsername.getText().matches(("\\S+"))
+    public void passwordEdit(TableColumn.CellEditEvent<Entry,String> event) {
+        Entry entry = tableView.getSelectionModel().getSelectedItem();
+        if (event.getNewValue().matches(("\\S+")))
+            entry.setPassword(event.getNewValue());
+    }
+    @FXML
+    public void addNewEntry() {
+        if (
+                newTitle.getText().matches(("\\S+"))
+                && newUsername.getText().matches(("\\S+"))
                 && newPassword.getText().matches(("\\S+"))
-                && groups.getSelectionModel().getSelectedIndex() !=-1)
+                && groups.getSelectionModel().getSelectedIndex() != -1
+        )
         {
             groups.getSelectionModel().getSelectedItem().addEntry(
                     new Entry(newTitle.getText(), newUsername.getText(), newPassword.getText()));
-            tableView.refresh();
 
+            tableView.refresh();
             newTitle.clear();
             newUsername.clear();
             newPassword.clear();
@@ -163,48 +175,37 @@ public class ManagerController implements Initializable  {
         }
     }
     @FXML
-    public void removeEntry(){
-        if(tableView.getSelectionModel().getSelectedIndex() != -1) {
+    public void removeEntry() {
+        if(tableView.getSelectionModel().getSelectedIndex() != -1)
             remove(tableView.getSelectionModel().getSelectedItem());
-        }
     }
 
     @FXML
-    public void passwordEdit(TableColumn.CellEditEvent<Entry,String> event){
-        Entry entry = tableView.getSelectionModel().getSelectedItem();
-        if(event.getNewValue().matches(("\\S+"))) {
-            entry.setPassword(event.getNewValue());
-        }
-    }
-
-    @FXML
-    public void addCategory(){
+    public void addCategory() {
         if(newCtg.getText().matches(("\\S+"))) {
             groups.getItems().add(new data.Group(newCtg.getText()));
             groups.refresh();
         }
-
         newCtg.clear();
     }
 
     @FXML
-    public void removeCategory(){
+    public void removeCategory() {
         if(groups.getSelectionModel().getSelectedIndex() != -1) {
             groups.getItems().remove(groups.getSelectionModel().getSelectedItem());
         }
     }
 
-    public void remove(Entry e){
+    public void remove(Entry e) {
         Group group = groups.getSelectionModel().getSelectedItem();
         group.getEntries().remove(e);
     }
 
     public void updateTimestamp() throws IOException {
-        reader=new BufferedReader(new FileReader("src/main/java/data/loginInfo.txt"));
-        String firstLine=reader.readLine();
-        if(firstLine != null){
+        reader = new BufferedReader(new FileReader("src/main/java/data/loginInfo.txt"));
+        String firstLine = reader.readLine();
+        if (firstLine != null)
             timeStamp.setText(firstLine);
-        }
 
         writer = new BufferedWriter(new FileWriter("src/main/java/data/loginInfo.txt"));
         writer.write(App.dateSave());
@@ -236,11 +237,8 @@ public class ManagerController implements Initializable  {
         password.prefWidthProperty().bind(tableView.widthProperty().divide(3));
         groups.prefHeightProperty().bind(stg.heightProperty());
 
-
-
-
         groups.getSelectionModel().selectedItemProperty().addListener((a,oldValue,newValue) -> {
-            if(a != null && a.getValue() != null){
+            if(a != null && a.getValue() != null) {
                 tableView.getItems().clear();
                 tableView.getItems().addAll(a.getValue().getEntries());
             }
@@ -248,7 +246,7 @@ public class ManagerController implements Initializable  {
     }
 
     @FXML
-    public void close(){
+    public void close() {
         Platform.exit();
     }
 }

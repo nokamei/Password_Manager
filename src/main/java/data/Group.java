@@ -29,12 +29,9 @@ public class Group {
         return entries;
     }
 
-
     public void addEntry(Entry e){
         this.entries.add(e);
     }
-
-
 
     @Override
     public String toString() {
