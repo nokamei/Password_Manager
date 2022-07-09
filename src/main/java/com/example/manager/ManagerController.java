@@ -164,10 +164,10 @@ public class ManagerController
                 && groups.getSelectionModel().getSelectedIndex() != -1
         )
         {
-            groups.getSelectionModel().getSelectedItem().addEntry(
-                    new Entry(newTitle.getText(), newUsername.getText(), newPassword.getText()));
+            Entry data = new Entry(newTitle.getText(), newUsername.getText(), newPassword.getText());
+            groups.getSelectionModel().getSelectedItem().addEntry(data);
+            tableView.getItems().add(data); //poprawka wizualna
 
-            tableView.refresh();
             newTitle.clear();
             newUsername.clear();
             newPassword.clear();
@@ -176,8 +176,11 @@ public class ManagerController
     }
     @FXML
     public void removeEntry() {
-        if(tableView.getSelectionModel().getSelectedIndex() != -1)
-            remove(tableView.getSelectionModel().getSelectedItem());
+        if(tableView.getSelectionModel().getSelectedIndex() != -1) {
+            Entry toDel = tableView.getSelectionModel().getSelectedItem();
+            tableView.getItems().remove(toDel); //poprawka wizualna
+            remove(toDel);
+        }
     }
 
     @FXML
